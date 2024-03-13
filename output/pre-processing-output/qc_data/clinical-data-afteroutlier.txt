@@ -1,0 +1,28 @@
+Diagnosis	Sex	Associated disease	Esophageal varices	HVPG	WHVP	Platelet count	Total bilirubin	Direct bilirubin at diagnosis	Spleen size	Liver elastography	Associated condition	No associated condition	Hematological associated condition	Associated condition-HIV	Known medication	PHT specific portal	PHT specific porto	PHT specific esophageal	PHT specific	PHT not specific	PHT not specific ascites	PHT not specific platelets	PHT not specific spleen	PSVD specific	PSVD specific obliterative	PSVD specific nodular	PSVD specific incomplete	PSVD non-specific	PSVD non-specific portaltract	PSVD non-specific architectural in portal	PSVD non-specific non zonal	PSVD non-specific mild	Good vs poor outcome at 5 years	Decompenstation at biopsy
+HNL01	1	1	2	0	5	6	208	1.02	0.2	9	6	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+HNL02	1	2	2	0	4.5	7	169	0.68	0.3	9.5	6.5	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+HNL03	1	2	1	0	3	8	222	0.46	0.2	8.5	5.5	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+HNL04	1	1	2	0	3	7		1.6	0.7	10	7	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+HNL05	1	1		0	4	6.5				9	6.5	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+HNL06	1	1	2	0	3.5	7.5		0.4	0.1	10.5	5.5	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+HNL08	1	2	1	0	2.5	6.5	224	0.5	0.2	9	5.5	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+HNL09	1	1	2	0	5	8	219	1	0.7	10		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+HNL10	1	2	1	0	4.4	6	227	1.34	0.9	10.5	4	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+HNL11	1	1	2	0	4	7	237	1.13	0.6	9.5		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+HNL12	1	1	2	0	4	7.5	386	0.3	0.1	9	5	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+PSVD01	2	1	2	1	14.5		561	0.4				1	0	1	0	0	0	1	1	1	1	1	1	0	1	1	0	1	1	0	1	0	1	1	0
+PSVD02	2	2	2	0	5	11	81	0.4	0.1	17	6.1	1	0	0	1	1	0	1	1	1	1	1	1	1	0	0	0	0	1	1	1	1	0	0	0
+PSVD03	2	2	1	0	10	16	54	4.7	0.6	17	12.2	0	1	0	0	0	0	0	1	1	1	0	1	1	1	0	1	0	1	1	0	0	0	0	0
+PSVD04	2	1		0			109	1.5	0.5	16	12	0	0	0	0	0	0	1	1	1	1	0	1	1	1	0	1	0	0	0	0	0	0	0	0
+PSVD06	2	1	2	0	8	11	308	0.9	0.3		7.8	1	0	0	1	1	0	0	1	1	0	0	0	0	1	1	0	0	1	0	0	1	0	1	1
+PSVD07	2	2	2	0	12	16.5	183	0.9	0.3	10	12.4	0	1	0	0	0	0	1	1	1	0	0	0	0	1	0	1	0	1	0	1	0	1	1	0
+PSVD08	2	1	1	0	1	8	86	0.6	0.2	16	4.4	1	0	1	0	0	0	0	0	0	1	0	1	1	0	0	0	0	1	0	0	1	0	0	0
+PSVD09	2	1	1	0	5	9	41	1.1	0.4	15	5.2	0	1	0	0	0	0	1	1	1	1	0	1	1	0	0	0	0	1	1	0	0	0	0	0
+PSVD10	2	2	1	0	10.5	16	145	0.3	0.1		6	0	1	0	0	0	1	1	1	1	1	0	1	1	1	0	1	1	1	0	1	1	1	1	1
+PSVD11	2	2	1	0	6	18.5	52	1	0.5	20		0	1	0	0	0	1	1	1	1	1	0	1	1	1	0	0	1	0	0	0	0	0	0	1
+PSVD12	2	2	2	0	2.5	7	156	0.5	0.2	14	9.9	1	0	0	0	0	0	1	1	1	1	1	0	0	1	1	0	0	1	1	0	1	1	0	1
+PSVD13	2	2	2	0	11	18	234	0.6	0.2		3.9		0	0	0	0	0	0	1	1	0	0	0	0	1	0	1	0	1	0	0	1	0		0
+PSVD14	2	2	2	1	11	19	340	1.7	0.5	14.5		1	0	1	0	0	1	1	1	1	1	1	0	1	0	0	0	0	1	1	0	1	0	1	0
+PSVD15	2	2	1	1			30	0.6	0.3		4.7	1	0	1	0	0	0	0	1	1	1	1	0	0	1	1	0	0	1	1	1	1	0	0	1
+PSVD16	2	2	2	1	8	12	34	4	1.4		8.4	0	1	0	0	0	0	1	1	1	1	1	1	1	1	1	0	0	1	0	1	1	0	1	1
+PSVD18	2	2	1	1	7	12	203	1.3	0.5	13.5		0	1	0	0	0	0	0	1	1	1	1	0	0	1	0	1	0	0	0	0	0	0	1	1
