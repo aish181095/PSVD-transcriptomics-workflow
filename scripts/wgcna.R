@@ -1,11 +1,6 @@
-##clear environment
-remove(list = ls())# only run at the start of the script
+#!/usr/bin/env Rscript
 
-if(!"knitr" %in% installed.packages()){
-  install.packages("knitr")
-}
-library(knitr)
-knitr:::input_dir()
+#.libPaths('/home/ash-maas/R/x86_64-pc-linux-gnu-library/4.4')
 
 ##required libraries
 library(AnnotationDbi)
@@ -13,7 +8,6 @@ library(preprocessCore)
 library(GO.db)
 library(readxl)
 library(WGCNA)
-library(rstudioapi)
 library(dplyr)
 library(biomaRt)
 library(clusterProfiler)
@@ -21,21 +15,16 @@ library(flashClust)
 library(pheatmap)
 library(ComplexHeatmap)
 
-# general config
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-
-##set data and output directory
-inputfilepath<-"../output/pre-processing-output/qc_data/"
-outputfileplots<- '../output/wgcna-network-output/plots'#directory for output plots
-
+args <- commandArgs(trailingOnly=TRUE)
 
 #load normalised gene expression data
-data <- read.delim(paste0(inputfilepath, 'normalised-data-afteroutlier.txt'),header=TRUE)
+data <- read.delim(args[1],header=TRUE)
+dim(data)
 #transpose data
 data<-as.data.frame(t(data))
 
 # load clinical data 
-clinical.data <- read.delim(paste0(inputfilepath, 'clinical-data-afteroutlier.txt'), header = T)
+clinical.data <- read.delim(args[2], header = T)
 
 
 ##check for minimal samples to run wgcna
@@ -69,8 +58,8 @@ sft = pickSoftThreshold(data,
                         verbose = 5, 
                         networkType = "signed")
 
-# Plot scale free plot
-pdf(paste0(outputfileplots, '/scale-free-plot.pdf'), width = 15, height = 10)
+# Plot scale free plot 
+pdf('scale-free-plot.pdf', width = 15, height = 10)
 par(mar=c(5,6,4,1)+.1)
 par(mfrow = c(1,2));
 cex1 = 1.5;
@@ -101,8 +90,8 @@ k=softConnectivity(datE=data,
                    power=14, 
                    type="signed")
 
-# Plot a histogram of k and a scale free topology plot
-pdf(paste0(outputfileplots, '/scale-free-topology.pdf'), width = 15, height = 10)
+# Plot a histogram of k and a scale free topology plot 
+pdf('scale-free-topology.pdf', width = 15, height = 10)
 par(mfrow=c(1,2))
 hist(k, xlab = expression(bold("k")), ylab = expression(bold("Frequency")))
 scaleFreePlot(k, main="Check scale free topology\n")
@@ -123,9 +112,9 @@ TOM = TOMsimilarity(adjacency,
 dissTOM = 1-TOM
 
 ##save the TOM matrix
-save(dissTOM, file = "WGCNA-input.RData")
+#save(dissTOM, file = "WGCNA-input.RData")
 
-lnames = load(file = "WGCNA-input.RData")
+#lnames = load(file = "WGCNA-input.RData")
 
 # Call the hierarchical clustering function
 geneTree = flashClust(as.dist(dissTOM), 
@@ -151,13 +140,13 @@ dynamicColors = labels2colors(dynamicMods)
 table(dynamicColors)
 
 ##Visualising the dendogram of the network and the modules detected
-plotDendroAndColors(geneTree,
-                    dynamicColors, "Dynamic Tree Cut", 
-                    dendroLabels = FALSE, 
-                    hang = 0.03, 
-                    addGuide = TRUE, 
-                    guideHang = 0.05, 
-                    main = "Gene dendrogram and module colors")
+#plotDendroAndColors(geneTree,
+#                    dynamicColors, "Dynamic Tree Cut", 
+#                    dendroLabels = FALSE, 
+#                    hang = 0.03, 
+#                    addGuide = TRUE, 
+#                    guideHang = 0.05, 
+#                    main = "Gene dendrogram and module colors")
 
 ##cluster modules together that their expression is similar
 MEList = moduleEigengenes(data, colors = dynamicColors)
@@ -203,15 +192,15 @@ nSamples=nrow(data)
 MEs0=moduleEigengenes(data,moduleColors)$eigengenes
 MEs=orderMEs(MEs0)
 
-####plot the new merged modules
-pdf(paste0(outputfileplots, '/tree-dendrogram.pdf'), width = 15, height = 10)
+####plot the new merged modules  
+png('tree-dendrogram.png')
 plotDendroAndColors(geneTree, cbind(dynamicColors, mergedColors),
                     c("Dynamic Tree Cut", "Merged dynamic"),
                     dendroLabels = FALSE, hang = 0.03,
                     addGuide = TRUE, guideHang = 0.05)
 dev.off()
 
-pdf(paste0(outputfileplots, '/module-eigengene.pdf'), width = 15, height = 10)
+png('module-eigengene.png')
 # Plot the relationships among the eigengenes 
 plotEigengeneNetworks(MEs, "", marDendro = c(0, 4, 1, 2), 
                       marHeatmap = c(3, 4, 1, 2), cex.lab = 0.8, xLabelsAngle = 90)
@@ -231,10 +220,10 @@ dim(textMatrix) = dim(moduleTraitCor)
 
 
 #Heatmap for module-trait relationships 
-pdf(paste0(outputfileplots, '/module-trait_relationship-all.pdf'), width = 40, height = 40)
+png('module-trait_relationship-all.png')
 # Will display correlations and their p-values
 # Display the correlation values within a heatmap plot
-par(mar=c(25,15,25,20)+.1)
+#par(mar=c(25,15,25,20)+.1)
 labeledHeatmap(Matrix = moduleTraitCor,
                xLabels = names(clinical.data),
                yLabels = rownames(moduleTraitPvalue),
@@ -281,7 +270,7 @@ p1<- pheatmap(as.matrix(diagnosis_matrix[,1]),
          fontsize_col = 9,
          angle_col = c("45"),
          legend = FALSE,
-         number_color = "green",
+         number_color = "black",
          fontsize_number = 30,
          fontface = "bold",
          display_numbers = matrix(ifelse(moduleTraitPvalue_diagnosis[,1] < 0.05, "*", ""), nrow(moduleTraitPvalue_diagnosis)))
@@ -306,11 +295,11 @@ p3<- pheatmap(moduleTraitCor_diagnosis[,2:35],
          angle_col = c("45"),
          fontsize_number = 30,
          fontface = "bold",
-         number_color = "green",
+         number_color = "black",
          display_numbers = matrix(ifelse(moduleTraitPvalue_diagnosis[,2:35] < 0.05, "*", ""), nrow(moduleTraitPvalue_diagnosis)))
 
 ##save in the output directory 
-pdf(paste0(outputfileplots, '/module-trait_relationship-subset.pdf'), width = 15, height = 8)
+pdf('module-trait_relationship-subset.pdf')
 draw(p2+p1+p3)
 dev.off()
 
@@ -340,13 +329,13 @@ geneInfo0 = data.frame(Gene.Symbol = colnames(data),
                        GSPvalue)
 
 ##export module trait significance as a txt file
-write.table(geneInfo0, '../output/wgcna-network-output/data/module-trait.txt', na ="", row.names=TRUE,  sep='\t', quote=FALSE)
+write.table(geneInfo0, 'module-trait.txt', na ="", row.names=TRUE,  sep='\t', quote=FALSE)
 
 ##export module eigenegene as txt file 
-write.table(MEs, "../output/wgcna-network-output/data/Module eigengene.txt", na ="", row.names=TRUE,  sep='\t', quote=FALSE)
+write.table(MEs, "Module-eigengene.txt", na ="", row.names=TRUE,  sep='\t', quote=FALSE)
 
 ##export module trait correlation significance matrix 
-write.table(moduleTraitPvalue, "../output/wgcna-network-output/data/moduleTraitPvalue.txt", na ="", row.names=TRUE,  sep='\t', quote=FALSE)
+write.table(moduleTraitPvalue, "moduleTraitPvalue.txt", na ="", row.names=TRUE,  sep='\t', quote=FALSE)
 
 
 

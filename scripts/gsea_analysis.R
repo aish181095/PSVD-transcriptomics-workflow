@@ -1,23 +1,13 @@
 #!/usr/bin/env Rscript
- source("DEG.R")
 
-
-
+#.libPaths('/home/ash-maas/R/x86_64-pc-linux-gnu-library/4.4') 
 
 
 
 ##For the visualisation of gsea output open Cytoscape to view the network. 
 
-##clear environment
-remove(list = ls())# only run at the start of the script
-
-if(!"knitr" %in% installed.packages()){
-  install.packages("knitr")
-}
-library(knitr)
-knitr:::input_dir()
-
 ##load required packages
+
 library(clusterProfiler)
 library(dplyr)
 library(Hmisc)
@@ -25,16 +15,10 @@ library(msigdbr)
 library(RCy3)
 library(enrichplot)
 
-# general config
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-
-##set data and output directory
-inputfilepath<-"../output/deg-output/data/"
-outputfileplots<- '../../output/gsea-viz_output/plots'#directory for output plots
+args <- commandArgs(trailingOnly=TRUE)
 
 #import data: containing logFC, p-value, adjusted p-value and gene ids. 
-psvdvshnl<- read.delim(paste0(inputfilepath, 'deg.data.txt'),header=TRUE, row.names = 1)
-
+psvdvshnl<- read.delim(args[1], header=TRUE, row.names = 1)
 
 ##create a genelist for GSEA
 #ranking gene on p-value
@@ -48,6 +32,7 @@ geneList= psvdvshnl[,9]
 names(geneList) = as.character(rownames(psvdvshnl))
 #sort on decreasing order
 geneList = sort(geneList,decreasing = TRUE)
+
 
 
 #import msigdb gene sets
@@ -74,6 +59,17 @@ pathway_gene_sets<- pathway_gene_sets %>%
 
 
 ##GSEA 
+pathway_gsea<-GSEA(geneList,
+                   TERM2GENE = pathway_gene_sets,
+                   maxGSSize = 1000,
+                   minGSSize = 30,
+                   seed = FALSE,
+                   by = "fgsea",
+                   pAdjustMethod ="fdr",
+                   pvalueCutoff = 0.05
+                   
+)
+
 pathway_gsea<-GSEA(geneList,
                    TERM2GENE = pathway_gene_sets,
                    maxGSSize = 1000,
@@ -142,6 +138,7 @@ pathway_ont$B<-c(rep(c(NA), each = nrow(pathway_ont)))
 pathway_ont$condition<-c(rep(c(NA), each = nrow(pathway_ont)))
 pathway_ont$names<-c(rep(c(NA), each = nrow(pathway_ont)))
 pathway_ont$entrez_id<-c(rep(c(NA), each = nrow(pathway_ont)))
+pathway_ont$NES_score_condition<-c(rep(c(NA), each = nrow(pathway_ont)))
 rownames(pathway_ont)<-pathway_ont$id
 
 ##add NES score for pathway
@@ -253,11 +250,6 @@ pathway_ids<-subset(pathway_ids, condition ==1)
 pathway_ont$NES_score_condition[pathway_ont$NES_score > 0] <- "positive"
 pathway_ont$NES_score_condition[pathway_ont$NES_score < 0] <- "negative"
 
-cytoscapePing()
-if("cytargetlinker" %in% commandsHelp("")) print("Success: the CyTargetLinker app is installed") else print("Warning: CyTargetLinker app is not installed. Please install the CyTargetLinker app before proceeding.")
-
-##Node table: Gene ID (Entrez) and Pathway Ids( KEGG, Reactome and WikiPathways)
-
 pathway_gene_nodes <- data.frame(id=pathway_id$id,
                                  group= pathway_id$group,
                                  stringsAsFactors = FALSE)
@@ -271,10 +263,9 @@ pathway_gene_edges <- data.frame(source=pathway_ids_subset$source,
                                  stringsAsFactors = FALSE)
 
 colnames(pathway_gene_edges)<-c("source", "target", "weight", "interaction" )
-##create network in Cytoscape
-createNetworkFromDataFrames(pathway_gene_nodes, pathway_gene_edges, title="GSEA pathway nodes cluster-jaccard", collection="GSEA")
 
 
+#data wrangling
 cytoscape_table$description<-tolower(cytoscape_table$description)
 cytoscape_table$description<-capitalize(cytoscape_table$description)
 
@@ -282,55 +273,17 @@ pathway_ont$description_new<-gsub("^.*?_","_", pathway_ont$description)
 pathway_ont$description_new<-gsub("_", " ", pathway_ont$description_new)
 pathway_ont$description_new<-tolower(pathway_ont$description_new)
 pathway_ont$description_new<-capitalize(pathway_ont$description_new)
-#pathway_ont$NES_score<-abs(pathway_ont$NES_score)
-
-
-##load node table data 
-#loadTableData(cytoscape_table)
 rownames(pathway_ont)<-pathway_ont$id
-loadTableData(pathway_ont)
-#write.table(NES_dataframe, "nes_data.txt", na ="", row.names=FALSE,  sep='\t', quote=FALSE)
 
-rownames(pathway_id)<-pathway_id$id
-loadTableData(pathway_id)
+##export files
+write.table(pathway_gene_nodes, "gsea-cytoscape-node-table.txt", na ="", row.names=TRUE,  sep='\t', quote=FALSE)
 
-##set the node shape 
-getNodeShapes()   # diamond, ellipse, trapezoid, triangle, etc.
-column <- 'group'
-values <- c('CP:KEGG', 'CP:REACTOME', 'CP:WIKIPATHWAYS', 'GO:BP')
-shapes <- c( 'ELLIPSE' , 'ELLIPSE', 'ELLIPSE', 'ELLIPSE')
-setNodeShapeMapping(column, values, shapes)
+write.table(pathway_gene_edges, "gsea-cytoscape-edges-table.txt", na ="", row.names=TRUE,  sep='\t', quote=FALSE)
 
-##Adding the pie chart to pathway nodes to visualise the down-regulated, not -changed and the up-regulated genes.
-setNodeCustomPieChart(c("down.sig","not.changed","up.sig"), colors = c('#334CFF', '#FFFFFF', '#FD5903') )
+write.table(cytoscape_table, "gsea-network-data-table.txt", na ="", row.names=TRUE,  sep='\t', quote=FALSE)
 
-lockNodeDimensions(TRUE)
+write.table(pathway_ont, "add-network-data-table.txt", na ="", row.names=TRUE,  sep='\t', quote=FALSE)
 
-##set the node size
-size<-c(100,100,100,100)
-setNodeSizeMapping('group', mapping.type = "d", values, size)
 
-#set the node label: only set for the pathway nodes
-setNodeLabelMapping("description_new")
 
-#set the node position
-setNodeCustomPosition(nodeAnchor = "C", graphicAnchor = "C", justification = "c")
 
-#set the node label font size
-setNodeFontSizeDefault(20)
-
-#set the font style of the node label
-setNodeFontFaceDefault("Arial,Rounded,Bold,45")
-
-#set the node border width
-border_width=c(20,20,20,20, 20)
-setNodeBorderWidthMapping('group', mapping.type = "d", values, border_width)
-
-#set the node border color: for visualising the pathway databases
-border_color=c("#FD5903", "#0026D3" )
-setNodeBorderColorMapping('NES_score_condition', mapping.type = "d", values, border_color)
-
-#set the edge color
-setEdgeColorDefault("#D7DBDD")
-
-deleteDuplicateEdges()

@@ -1,8 +1,6 @@
-if(!"knitr" %in% installed.packages()){
-  install.packages("knitr")
-}
-library(knitr)
-knitr:::input_dir()
+#!/usr/bin/env Rscript
+
+#.libPaths('/home/ash-maas/R/x86_64-pc-linux-gnu-library/4.4')
 
 ##import packages
 require(limma)
@@ -11,18 +9,19 @@ library(EnhancedVolcano)
 library(biomaRt)
 
 
-# general config
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))#active working directory 
+args <- commandArgs(trailingOnly=TRUE)
 
 #setting input and output directories
-inputfilepath<-"../output/pre-processing-output/qc_data/"
-outputplots.deg<-"../output/deg-output/plots/"
-outputdata.deg<- "../output/deg-output/data/" 
+#qc_results_dir<-'../output/pre-processing-output'
+#inputfilepath<-file.path(qc_results_dir, "qc_data/")
+#deg.out.dir<-"../output/deg-output/"
+#outputplots.deg<-file.path(deg.out.dir, "plots")
+#outputdata.deg<- file.path(deg.out.dir, "data")
 
 #Import normalised expression and clinical data file
-normalised_data<- read.delim(paste0(inputfilepath, 'normalised-data-afteroutlier.txt'),header=TRUE)
+normalised_data<- read.delim(args[1],header=TRUE)
 
-clinical.data<-read.delim(paste0(inputfilepath, 'clinical-data-afteroutlier.txt'),header=TRUE)
+clinical.data<-read.delim(args[2],header=TRUE)
 
 
 #1.5 Statistical analysis (DEG analysis)
@@ -52,7 +51,7 @@ fit_contrast<-eBayes(fit_contrast)
 
 #Generate a volcano plot to visualize the foldchanges across comparisons of conditions and identify the pattern of up- or down- regulation
 #of the genes. Here we observe most of the genes getting down-regulated.
-volcanoplot(fit_contrast,xlab="log2Foldchange",ylab="-log10(pvalue)" )
+#volcanoplot(fit_contrast,xlab="log2Foldchange",ylab="-log10(pvalue)" )
 
 #dataframe for foldchanges for psbd vs HNL comparison
 psvdvshnl<-topTable(fit_contrast,coef = 'PSVDvsHNL',sort.by = "B",number=nrow(normalised_data),adjust.method ="BH")
@@ -85,8 +84,8 @@ deg.gene.data <- deg.gene.data[!duplicated(deg.gene.data$hgnc_symbol), ]
 deg.gene.data.subset<-subset(deg.gene.data, abs(logFC) > 5.8 )
 
 
-##volcano plot
-pdf(paste0(outputplots.deg, 'volcanoplot.pdf'), width = 20, height = 20)
+##volcano plot width = 20, height = 20
+png('volcanoplot.png', width = 1000, height = 1000)
 EnhancedVolcano(deg.gene.data, 
                 lab = deg.gene.data$hgnc_symbol,
                 x = 'logFC', y = 'adj.P.Val', 
@@ -107,5 +106,5 @@ dev.off()
 
 
 #export deg list with log fold change, p value, p adjusted value, B,..
-write.table(psvdvshnl, "C:\\Users\\P70069388\\Documents\\PVH data\\Illumina-processing\\git-repositories\\PSVD-Workflow\\output\\deg-output\\data\\deg.data.txt", na ="", row.names=TRUE,  sep='\t', quote=FALSE)
+write.table(psvdvshnl, "deg.data.txt", na ="", row.names=TRUE,  sep='\t', quote=FALSE)
 

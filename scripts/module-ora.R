@@ -1,11 +1,6 @@
-##clear environment
-remove(list = ls())# only run at the start of the script
+#!/usr/bin/env Rscript
 
-if(!"knitr" %in% installed.packages()){
-  install.packages("knitr")
-}
-library(knitr)
-knitr:::input_dir()
+#.libPaths('/home/ash-maas/R/x86_64-pc-linux-gnu-library/4.4')
 
 ##required libraries
 library(AnnotationDbi)
@@ -13,7 +8,6 @@ library(preprocessCore)
 library(GO.db)
 library(readxl)
 library(WGCNA)
-library(rstudioapi)
 library(dplyr)
 library(biomaRt)
 library(clusterProfiler)
@@ -23,16 +17,12 @@ library(enrichplot)
 library(Hmisc)
 library(ggplot2)
 
+library(org.Hs.eg.db)
 
-# general config
-setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
-
-##set data and output directory
-inputfilepath<-"../output/wgcna-network-output/data/"
-outputfileplots<- '../output/module-analysis-output/'#directory for output plots
+args <- commandArgs(trailingOnly=TRUE)
 
 ##import module trait significance data
-geneInfo0<- read.delim(paste0(inputfilepath, 'module-trait.txt'),header=TRUE)
+geneInfo0<- read.delim(args[1],header=TRUE)
 
 geneInfo0$Gene.Symbol<-as.character(geneInfo0$Gene.Symbol)
 
@@ -117,7 +107,7 @@ for (samples in c("grey60_ora", "red_ora", "black_ora", "darkturquoise_ora","blu
   }
   else if (length(get(samples)$ID)<=4) {
     #dot plot 
-    pdf(file=paste(outputfileplots, samples, "_dotplot.pdf", sep=""), paper="a4")
+    pdf(file=paste(samples, "_dotplot.pdf", sep=""), paper="a4")
     print(dotplot(get(samples), showCategory=45))
     dev.off()
   }
@@ -128,10 +118,9 @@ for (samples in c("grey60_ora", "red_ora", "black_ora", "darkturquoise_ora","blu
     assign(newname.1, pairwise.calc)
     
     ##make and save tree plot
-    pdf(file=paste(outputfileplots, gsub("_[^_]+$", "",newname.1), "_treeplot.pdf", sep=""), width = 25, height = 8)
+    pdf(file=paste(gsub("_[^_]+$", "",newname.1), "_treeplot.pdf", sep=""), width = 25, height = 8)
     print(treeplot(get(newname.1), showCategory=45, cluster.params = list(method = "ward.D2", label_words_n = 0), label_format = 5, fontsize =6)+ 
             theme(legend.position="left"))
     dev.off()
   }
 }
-

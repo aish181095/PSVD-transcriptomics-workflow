@@ -1,0 +1,18 @@
+# Input files
+
+raw_counts:
+ class: File
+ path: /home/ash-maas/Documents/PSVD-transcriptomics-workflow/Data/raw/GSE77627_non-normalized.txt
+ format: http://edamontology.org/data_2603 # Expression data
+ 
+bgxfile:
+ class: File
+ path: /home/ash-maas/Documents/PSVD-transcriptomics-workflow/Data/Annot/HumanHT-12_V4_0_R2_15002873_B.bgx 
+ format: http://edamontology.org/data_2526 #text data
+ 
+clinical_data:
+ class: File
+ path: /home/ash-maas/Documents/PSVD-transcriptomics-workflow/Data/clinical-data/clinical_data_intial.xlsx
+ format: http://edamontology.org/data_2526 #text data
+ 
+
