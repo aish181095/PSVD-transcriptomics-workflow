@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 
-.libPaths('/home/ash-maas/R/x86_64-pc-linux-gnu-library/4.4')
+#.libPaths('/home/ash-maas/R/x86_64-pc-linux-gnu-library/4.4')
 
 ##import packages
 library(limma)
