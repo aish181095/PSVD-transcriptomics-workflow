@@ -1,3 +1,6 @@
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11656581.svg)](https://doi.org/10.5281/zenodo.11656581)
+
 # Porto-Sinusoidal Vascular Disease transcriptomics analysis workflow
 
 Workflow for gene set enrichment analsysis (GSEA) and co-expression analysis (WGCNA) on transcriptomics data to analyze pathways affected in Porto-Sinusoidal Vascular Disease.
