@@ -1,7 +1,7 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11656581.svg)](https://doi.org/10.5281/zenodo.11656581)
 
-[![DOI](https://doi.org/10.48546/WORKFLOWHUB.WORKFLOW.1040.svg)](https://doi.org/10.48546/WORKFLOWHUB.WORKFLOW.1040.1)
+[![DOI](https://img.shields.io/badge/WorkflowHub?style=for-the-badge&link=https%3A%2F%2Fdoi.org%2F10.48546%2FWORKFLOWHUB.WORKFLOW.1040.1)](https://doi.org/10.48546/WORKFLOWHUB.WORKFLOW.1040.1)
 
 
 # Porto-Sinusoidal Vascular Disease transcriptomics analysis workflow
