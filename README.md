@@ -4,7 +4,7 @@
 [![Static Badge](https://img.shields.io/badge/WorkflowHub-1040.1-brightgreen?style=flat&logo=%23B5314C&logoColor=black&logoSize=auto&labelColor=grey&color=%23A020F0&cacheSeconds=3600&link=https%3A%2F%2Fworkflowhub.eu%2Fworkflows%2F1040)
 ](https://doi.org/10.48546/WORKFLOWHUB.WORKFLOW.1040.1)
 
-[![Static Badge](https://img.shields.io/badge/-4.4.0-brightgreen?style=flat&logo=r&logoColor=white&logoSize=auto&labelColor=%233b3b3b&color=%234040FF&cacheSeconds=3600)]
+![Static Badge](https://img.shields.io/badge/-4.4.0-brightgreen?style=flat&logo=r&logoColor=white&logoSize=auto&labelColor=%233b3b3b&color=%234040FF&cacheSeconds=3600)
 
 
 
